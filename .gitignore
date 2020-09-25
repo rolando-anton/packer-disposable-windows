@@ -1,0 +1,4 @@
+**/*.lock
+packer_cache
+output*
+**/gcp.json

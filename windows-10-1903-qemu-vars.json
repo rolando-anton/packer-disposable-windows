@@ -1,0 +1,14 @@
+{
+    "packer_user": "labadmin",
+    "packer_pass": "40Net123#",
+    "disk_size": "81920",
+    "memory": "4096",
+    "cpus": "8",
+    "headless": "true",
+    "iso_url": "https://software-download.microsoft.com/download/pr/18362.30.190401-1528.19h1_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso",
+    "iso_checksum": "ab4862ba7d1644c27f27516d24cb21e6b39234eb3301e5f1fb365a78b22f79b3",
+    "iso_checksum_type": "sha256",
+    "name": "windows_10-1903",
+    "version" : "1",
+    "floppy_files_list" : "floppy/drivers/win10/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_10/autounattend.xml"
+}

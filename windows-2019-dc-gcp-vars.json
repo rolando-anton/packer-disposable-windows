@@ -1,0 +1,18 @@
+{
+    "packer_user": "labadmin",
+    "packer_pass": "40Net123#",
+    "compress": "false",
+    "disk_size": "81920",
+    "disk_format": "raw",
+    "memory": "8192",
+    "cpus": "12",
+    "headless": "true",
+    "iso_checksum_type": "sha256",
+    "iso_checksum": "549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1",
+    "iso_url": "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso",
+    "name": "disk.raw",
+    "version" : "1",
+    "gcs_bucket" : "packer_images",
+    "image_family": "windows-2019-dc",
+    "floppy_files_list" : "floppy/drivers/virtio-win-0.1.135/viostor/2k16/amd64/*,floppy/drivers/virtio-win-0.1.135/NetKVM/2k16/amd64/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2019/qemu/autounattend.xml"
+}

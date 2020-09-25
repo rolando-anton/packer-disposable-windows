@@ -1,0 +1,225 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "",
+      "boot_wait": "1m",
+      "disk_compression": "{{ user `compress`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "format": "{{user `disk_format`}}",
+      "floppy_files": "{{ user `floppy_files_list` }}",
+      "headless": true,
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_url` }}"
+      ],
+      "output_directory": "output",
+      "qemuargs": [
+        [
+          "-m",
+          "4096M"
+        ],
+        [
+          "-cpu",
+          "Westmere"
+        ],
+        [
+          "-m",
+          "{{ user `memory` }}"
+        ],
+        [
+          "-smp",
+          "cpus={{ user `cpus`}}"
+        ]
+      ],
+      "shutdown_command": "C:/Windows/packer/PackerShutdown.bat",
+      "shutdown_timeout": "10m",
+      "vm_name": "{{user `name`}}",
+      "communicator": "winrm",
+      "winrm_insecure": "true",
+      "winrm_use_ssl": "true",
+      "winrm_username": "{{user `packer_user`}}",
+      "winrm_password": "{{user `packer_pass`}}",
+      "winrm_port": "5986",
+      "winrm_timeout": "4h"
+    },
+    {
+      "type": "vsphere-iso",
+      "vm_name": "{{user `name`}}",
+      "CPUs": "{{user `cpus`}}",
+      "RAM": "{{user `memory`}}",
+      "RAM_reserve_all": true,
+      "communicator": "winrm",
+      "convert_to_template": "true",
+      "cluster": "{{user `vsphere-cluster`}}",
+      "datacenter": "{{user `vsphere-datacenter`}}",
+      "datastore": "{{user `vsphere-datastore`}}",
+      "username": "{{user `vsphere-user`}}",
+      "vcenter_server": "{{user `vsphere-server`}}",
+      "disk_controller_type": "pvscsi",
+      "firmware": "bios",
+      "floppy_files": "{{ user `floppy_files_list` }}",
+      "folder": "{{user `vsphere-folder`}}",
+      "guest_os_type": "windows9Server64Guest",
+      "insecure_connection": "true",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
+      "iso_paths": [
+        "[] /vmimages/tools-isoimages/windows.iso"
+      ],
+      "iso_urls": [
+        "{{ user `iso_url` }}"
+      ],
+      "network_adapters": [
+        {
+          "network": "{{user `vsphere-network`}}",
+          "network_card": "vmxnet3"
+        }
+      ],
+      "password": "{{user `vsphere-password`}}",
+      "storage": [
+        {
+          "disk_size": "{{user `disk_size`}}",
+          "disk_thin_provisioned": true
+        }
+      ],
+      "export": {
+        "force": true,
+        "output_directory": "output_{{user `name`}}"
+      },
+      "winrm_timeout": "4h",
+      "winrm_use_ssl": "true",
+      "winrm_insecure": "true",
+      "winrm_password": "{{user `packer_pass`}}",
+      "winrm_username": "{{user `packer_user`}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "scripts": [
+        "scripts/unlimited-password-expiration.bat",
+        "scripts/uac-disable.bat",
+        "scripts/disable-hibernate.bat"
+      ],
+      "type": "windows-shell"
+    },
+    {
+      "pause_before": "60s",
+      "type": "powershell",
+      "scripts": [
+        "scripts/set_firewall_rules.ps1",
+        "scripts/install-choco.ps1",
+        "scripts/dis-updates.ps1"
+      ]
+    },
+    {
+      "inline": [
+        "Write-Host \"Installing Tools\"",
+        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install"
+      ],
+      "type": "powershell"
+    },
+    {
+      "inline": "New-Item -Path \"C:\\Windows\\packer\" -ItemType Directory -Force",
+      "type": "powershell"
+    },
+    
+    {
+      "type": "file",
+      "source": "scripts/PackerShutdown.bat",
+      "destination": "C:\\Windows\\packer\\PackerShutdown.bat"
+    },
+    {
+      "type": "file",
+      "source": "autounattend/sysprep/unattended.xml",
+      "destination": "C:\\Windows\\packer\\unattended.xml"
+    },
+    {
+      "inline": "New-Item -Path 'C:\\Windows\\Setup\\Scripts' -ItemType Directory -Force",
+      "type": "powershell"
+    },
+    {
+      "type": "file",
+      "source": "scripts/SetupComplete.cmd",
+      "destination": "C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd"
+    },
+    {
+      "inline": "choco-cleaner.bat",
+      "type": "windows-shell"
+    },
+    {
+      "script": "scripts/disable-windows-features.ps1",
+      "type": "powershell"
+    },
+    {
+      "type": "windows-restart",
+      "restart_check_command": "powershell -command \"& {Write-Output 'restarted.'}\""
+
+    },
+    {
+      "script": "scripts/cleanup.ps1",
+      "type": "powershell"
+    },
+    {
+      "type": "windows-restart",
+      "restart_check_command": "powershell -command \"& {Write-Output 'restarted.'}\""
+
+    }
+  ],
+  "post-processors": [
+    [
+       {
+         "only": ["qemu"],
+         "type": "compress",
+         "output": "output/disk.raw.tar.gz",
+	 "format": ".tar.gz"
+       },
+
+      {
+        "type": "shell-local",
+        "name": "gcp",
+        "only": ["qemu"],	
+        "inline": [
+         "gsutil cp output/disk.raw.tar.gz gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz",
+         "gcloud compute images create {{user `image_family`}}-{{timestamp}} \\",
+         "--source-uri=gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz \\",
+         "--family={{user `image_family`}}"
+        ]
+      },
+
+
+    {
+     "type": "shell-local",
+     "name": "convert-to-ova",
+     "only": ["vsphere-iso"],
+     "inline": [ 
+        "/usr/bin/ovftool output_{{user `name`}}/{{user `name`}}.ovf output_{{user `name`}}/{{user `name`}}.ova",
+        "rm -vf output_{{user `name`}}/{{user `name`}}.ovf output_{{user `name`}}/{{user `name`}}.mf output_{{user `name`}}/{{user `name`}}-disk-0.vmdk"
+     ]
+    },
+    {
+      "only": ["vsphere-iso"],
+      "files": [
+        "output_{{user `name`}}/{{user `name`}}.ova"
+      ],
+      "type": "artifice"
+    },
+    {
+      "type": "amazon-import",
+      "only": ["vsphere-iso"],
+      "name": "aws",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "{{user `aws_region`}}",
+      "s3_bucket_name": "{{user `aws_s3_bucket_name`}}",
+      "s3_key_name": "{{user `name`}}.ova",
+      "keep_input_artifact": false,
+      "license_type": "BYOL",
+      "tags": {
+        "Description": "packer amazon-import {{timestamp}}"
+      }
+    }
+    ]
+ ]
+
+ 
+}
