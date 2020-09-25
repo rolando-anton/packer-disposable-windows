@@ -1,12 +1,4 @@
 {
-  "vsphere-server": "vcsa.fortilabs.org",
-  "vsphere-user": "administrator@cloud.fortilabs.org",
-  "vsphere-password": "Nada123#",
-  "vsphere-datacenter": "Home",
-  "vsphere-cluster": "Aiur" ,
-  "vsphere-network": "VM Network" ,
-  "vsphere-datastore": "NVMe01",
-  "vsphere-folder": "",
   "packer_user": "labadmin",
   "packer_pass": "40Net123#",
   "disk_size": "81920",

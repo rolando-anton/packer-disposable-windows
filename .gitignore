@@ -1,4 +1,5 @@
 **/*.lock
 packer_cache
+vsphere-creds.json
 output*
 **/gcp.json
