@@ -1,0 +1,14 @@
+{
+    "packer_user": "labadmin",
+    "packer_pass": "40Net123#",
+    "disk_size": "81920",
+    "memory": "4096",
+    "cpus": "8",
+    "headless": "true",
+    "iso_url": "https://software-download.microsoft.com/db/Win10_1909_English_x64.iso?t=9c8a70a9-982c-4317-a31b-853881347543&e=1601507381&h=5206df6ad38e8e9b821b538b2313e381",
+    "iso_checksum": "9dc9cd4d956c51fdaa9ecd0f86fdf0a1e35526d9",
+    "iso_checksum_type": "sha1",
+    "name": "windows_10-1909-vsphere",
+    "version" : "1",
+    "floppy_files_list" : "floppy/ConfigureRemotingForAnsible.ps1,floppy/install-vm-tools.cmd,autounattend/windows_10/vsphere/autounattend.xml"
+}
