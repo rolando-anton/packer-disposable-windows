@@ -1,14 +1,18 @@
 {
     "packer_user": "labadmin",
     "packer_pass": "40Net123#",
+    "compress": "false",
     "disk_size": "81920",
-    "memory": "4096",
-    "cpus": "8",
+    "disk_format": "raw",
+    "memory": "8192",
+    "cpus": "12",
     "headless": "true",
     "iso_checksum": "9ef81b6a101afd57b2dbfa44d5c8f7bc94ff45b51b82c5a1f9267ce2e63e9f53",
     "iso_checksum_type": "sha256",
     "iso_url": "https://software-download.microsoft.com/download/pr/18363.418.191007-0143.19h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso",
-    "name": "windows_10-1909-vsphere",
+    "name": "disk.raw",
     "version" : "1",
-    "floppy_files_list" : "floppy/ConfigureRemotingForAnsible.ps1,floppy/install-vm-tools.cmd,autounattend/windows_10/vsphere/autounattend.xml"
+    "gcs_bucket" : "packer_images",
+    "image_family": "windows-10-1903",
+    "floppy_files_list" : "floppy/drivers/win10/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_10/qemu/autounattend.xml"
 }
