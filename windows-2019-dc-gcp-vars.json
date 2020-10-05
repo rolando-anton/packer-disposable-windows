@@ -14,5 +14,5 @@
     "version" : "1",
     "gcs_bucket" : "packer_images",
     "image_family": "windows-2019-dc",
-    "floppy_files_list" : "floppy/drivers/virtio-win-0.1.135/viostor/2k16/amd64/*,floppy/drivers/virtio-win-0.1.135/NetKVM/2k16/amd64/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2019/qemu/autounattend.xml"
+    "floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2019/qemu/autounattend.xml"
 }

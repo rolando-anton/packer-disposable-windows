@@ -10,5 +10,5 @@
     "iso_checksum_type": "sha256",
     "name": "windows_10-1903",
     "version" : "1",
-    "floppy_files_list" : "floppy/drivers/win10/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_10/autounattend.xml"
+    "floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_10/autounattend.xml"
 }

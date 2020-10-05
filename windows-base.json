@@ -3,7 +3,7 @@
     {
       "type": "qemu",
       "name": "",
-      "boot_wait": "1m",
+      "boot_wait": "5m",
       "disk_compression": "{{ user `compress`}}",
       "disk_size": "{{user `disk_size`}}",
       "format": "{{user `disk_format`}}",
@@ -32,8 +32,8 @@
           "cpus={{ user `cpus`}}"
         ]
       ],
-      "shutdown_command": "C:/Windows/packer/PackerShutdown.bat",
-      "shutdown_timeout": "10m",
+      "shutdown_command": "C:\\Windows\\system32\\sysprep\\sysprep.exe /unattend:C:\\Windows\\packer\\unattended.xml /quiet /generalize /oobe /shutdown",
+      "shutdown_timeout": "20m",
       "vm_name": "{{user `name`}}",
       "communicator": "winrm",
       "winrm_insecure": "true",
@@ -62,6 +62,8 @@
       "folder": "{{user `vsphere-folder`}}",
       "guest_os_type": "windows9Server64Guest",
       "insecure_connection": "true",
+      "shutdown_command": "C:\\Windows\\system32\\sysprep\\sysprep.exe /unattend:C:\\Windows\\packer\\unattended.xml /quiet /generalize /oobe /shutdown",
+      "shutdown_timeout": "20m",
       "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_paths": [
         "[] /vmimages/tools-isoimages/windows.iso"
@@ -125,11 +127,6 @@
     
     {
       "type": "file",
-      "source": "scripts/PackerShutdown.bat",
-      "destination": "C:\\Windows\\packer\\PackerShutdown.bat"
-    },
-    {
-      "type": "file",
       "source": "autounattend/sysprep/unattended.xml",
       "destination": "C:\\Windows\\packer\\unattended.xml"
     },
@@ -164,6 +161,8 @@
       "restart_check_command": "powershell -command \"& {Write-Output 'restarted.'}\""
 
     }
+
+
   ],
   "post-processors": [
     [

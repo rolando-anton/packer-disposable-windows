@@ -10,5 +10,5 @@
 "disk_size": "81920",
 "memory": "4096",
 "cpus": "8",
-"floppy_files_list" : "floppy/drivers/virtio-win-0.1.135/viostor/2k16/amd64/*,floppy/drivers/virtio-win-0.1.135/NetKVM/2k16/amd64/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2019/autounattend.xml"
+"floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2019/autounattend.xml"
 }
