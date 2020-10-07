@@ -10,26 +10,20 @@
       "floppy_files": "{{ user `floppy_files_list` }}",
       "headless": true,
       "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
-      "iso_urls": [
-        "{{ user `iso_url` }}"
-      ],
+      "iso_urls": [ "{{ user `iso_url` }}" ],
       "output_directory": "output",
       "qemuargs": [
         [
-          "-m",
-          "4096M"
+          "-m", "4096M"
         ],
         [
-          "-cpu",
-          "Westmere"
+          "-cpu", "Westmere"
         ],
         [
-          "-m",
-          "{{ user `memory` }}"
+          "-m", "{{ user `memory` }}"
         ],
         [
-          "-smp",
-          "cpus={{ user `cpus`}}"
+          "-smp", "cpus={{ user `cpus`}}"
         ]
       ],
       "shutdown_command": "C:\\Windows\\system32\\sysprep\\sysprep.exe /unattend:C:\\Windows\\packer\\unattended.xml /quiet /generalize /oobe /shutdown",
