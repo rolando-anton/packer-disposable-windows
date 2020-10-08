@@ -13,6 +13,6 @@
     "name": "disk.raw",
     "version" : "1",
     "gcs_bucket" : "packer_images",
-    "image_family": "windows-10-1903",
+    "image_family": "windows-10-1909",
     "floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_10/qemu/autounattend.xml"
 }

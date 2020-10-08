@@ -2,7 +2,7 @@
   "builders": [
     {
       "type": "qemu",
-      "name": "",
+      "accelerator": "kvm",
       "boot_wait": "5m",
       "disk_compression": "{{ user `compress`}}",
       "disk_size": "{{user `disk_size`}}",
@@ -136,10 +136,6 @@
     {
       "inline": "choco-cleaner.bat",
       "type": "windows-shell"
-    },
-    {
-      "script": "scripts/disable-windows-features.ps1",
-      "type": "powershell"
     },
     {
       "type": "windows-restart",
