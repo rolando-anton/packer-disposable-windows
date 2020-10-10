@@ -104,6 +104,8 @@
       "scripts": [
         "scripts/set_firewall_rules.ps1",
         "scripts/install-choco.ps1",
+        "scripts/Set-PowerSettings.ps1",
+        "scripts/Set-WindowsTelemetrySettings.ps1",
         "scripts/dis-updates.ps1"
       ]
     },
