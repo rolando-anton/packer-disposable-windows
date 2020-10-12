@@ -27,19 +27,6 @@
 
  Try
  {
-	 # Disable Connected User Experiences and Telemetry Service
-	 Stop-Service -Name dmwappushservice -Force
-	 Set-Service -Name dmwappushservice -StartupType Disabled
- }
- Catch
- {
-	 Write-Error "Could not disable dmwappushservice service. Exiting."
-	 Write-Host $_.Exception | format-list -force
-	Exit 1
- }
-
- Try
- {
 	 # Disable Diagnostics Tracking Service
 	 Stop-Service -Name DiagTrack -Force
 	 Set-Service -Name DiagTrack -StartupType Disabled

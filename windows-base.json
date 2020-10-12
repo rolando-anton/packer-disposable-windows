@@ -26,8 +26,8 @@
           "-smp", "cpus={{ user `cpus`}}"
         ]
       ],
-      "shutdown_command": "C:\\Windows\\system32\\sysprep\\sysprep.exe /unattend:C:\\Windows\\packer\\unattended.xml /quiet /generalize /oobe /shutdown",
-      "shutdown_timeout": "20m",
+      "shutdown_command": "C:\\Windows\\packer\\shutdown.bat",
+      "shutdown_timeout": "1h",
       "vm_name": "{{user `name`}}",
       "communicator": "winrm",
       "winrm_insecure": "true",
@@ -56,8 +56,8 @@
       "folder": "{{user `vsphere-folder`}}",
       "guest_os_type": "windows9Server64Guest",
       "insecure_connection": "true",
-      "shutdown_command": "C:\\Windows\\system32\\sysprep\\sysprep.exe /unattend:C:\\Windows\\packer\\unattended.xml /quiet /generalize /oobe /shutdown",
-      "shutdown_timeout": "20m",
+      "shutdown_command": "C:\\Windows\\packer\\shutdown.bat",
+      "shutdown_timeout": "1h",
       "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_paths": [
         "[] /vmimages/tools-isoimages/windows.iso"
@@ -78,10 +78,6 @@
           "disk_thin_provisioned": true
         }
       ],
-      "export": {
-        "force": true,
-        "output_directory": "output_{{user `name`}}"
-      },
       "winrm_timeout": "4h",
       "winrm_use_ssl": "true",
       "winrm_insecure": "true",
@@ -112,7 +108,7 @@
     {
       "inline": [
         "Write-Host \"Installing Tools\"",
-        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install"
+        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install bginfo"
       ],
       "type": "powershell"
     },
@@ -126,6 +122,16 @@
       "source": "autounattend/sysprep/unattended.xml",
       "destination": "C:\\Windows\\packer\\unattended.xml"
     },
+    {
+      "type": "file",
+      "source": "scripts/shutdown.bat",
+      "destination": "C:\\Windows\\packer\\"
+    },    
+    {
+      "type": "file",
+      "source": "scripts/bginfo.bgi",
+      "destination": "C:\\ProgramData\\chocolatey\\lib\\bginfo\\Tools\\"
+    },   
     {
       "inline": "New-Item -Path 'C:\\Windows\\Setup\\Scripts' -ItemType Directory -Force",
       "type": "powershell"
