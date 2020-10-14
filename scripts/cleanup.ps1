@@ -17,9 +17,6 @@ Param (
   # Remove cached update files. Prevents uninstalling updates. Fairly quick.
   [Switch] $CleanUpdates = $true,
  
-  # Empty out Windows Event Logs. Fairly quick.
-  [Switch] $CleanEventLogs = $true,
- 
   # Remove temporary files used during build, such as Temp, Panther, Nuget and logs folders. Fairly quick.
   [Switch] $DeleteBuildfiles = $true,
  
@@ -49,14 +46,6 @@ If($CleanUpdates) {
   Remove-Item c:\Windows\SoftwareDistribution\Download\* -Recurse -Force
   Start-Service -Name wuauserv
 }
- 
- 
-# Emptying Logs
-# This shouldn't really be necessary, as SysPrep should do this too
-If($CleanEventLogs) {
-  (Get-WinEvent -ListLog *).logname | ForEach-Object {[System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog("$psitem")}
-}
- 
  
 # Write-Host "Cleaning SxS..."
 If($CleanSxS) {
