@@ -124,10 +124,11 @@
         "name": "gcp",
         "only": ["qemu"],	
         "inline": [
-         "gsutil cp output-{{user `name`}}-{{timestamp}}/{{user `name`}}.tar.gz gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz",
+         "gsutil cp {{user `name`}}.tar.gz gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz",
          "gcloud compute images create {{user `image_family`}}-{{timestamp}} \\",
          "--source-uri=gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz \\",
-         "--family={{user `image_family`}}"
+         "--family={{user `image_family`}}",
+         "rm -vf {{user `name`}}.tar.gz"
         ]
       },
 
