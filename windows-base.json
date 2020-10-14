@@ -15,7 +15,7 @@
       "qemuargs": [[ "-m", "4096M" ],[ "-cpu", "Westmere" ],[ "-m", "{{ user `memory` }}" ],[ "-smp", "cpus={{ user `cpus`}}" ]],
       "shutdown_command": "C:\\Windows\\packer\\shutdown.bat",
       "shutdown_timeout": "1h",
-      "vm_name": "{{user `name`}}-{{timestamp}}",
+      "vm_name": "{{user `name`}}",
       "communicator": "winrm",
       "winrm_insecure": "true",
       "winrm_use_ssl": "true",
@@ -124,7 +124,7 @@
         "name": "gcp",
         "only": ["qemu"],	
         "inline": [
-         "gsutil cp output/disk.raw.tar.gz gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz",
+         "gsutil cp output-{{user `name`}}-{{timestamp}}/{{user `name`}}.tar.gz gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz",
          "gcloud compute images create {{user `image_family`}}-{{timestamp}} \\",
          "--source-uri=gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz \\",
          "--family={{user `image_family`}}"
