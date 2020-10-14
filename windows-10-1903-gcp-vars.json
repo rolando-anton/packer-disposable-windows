@@ -11,7 +11,6 @@
     "iso_checksum": "ab4862ba7d1644c27f27516d24cb21e6b39234eb3301e5f1fb365a78b22f79b3",
     "iso_checksum_type": "sha256",
     "name": "disk.raw",
-    "version" : "1",
     "gcs_bucket" : "packer_images",
     "image_family": "windows-10-1903",
     "floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_10/qemu/autounattend.xml"

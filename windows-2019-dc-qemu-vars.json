@@ -1,7 +1,7 @@
 {
-"name": "windows_2019",
-"output_directory": "./output/windows_2019-base",
-"version": "1.0",
+"name": "windows-2019-dc",
+"disk_format": "qcow2",
+"compress": "true",
 "iso_checksum_type": "sha256",
 "iso_checksum": "549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1",
 "iso_url": "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso",
@@ -10,5 +10,5 @@
 "disk_size": "81920",
 "memory": "4096",
 "cpus": "8",
-"floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2019/autounattend.xml"
+"floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2019/qemu/autounattend.xml"
 }

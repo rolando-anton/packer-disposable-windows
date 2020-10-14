@@ -11,24 +11,11 @@
       "headless": true,
       "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_urls": [ "{{ user `iso_url` }}" ],
-      "output_directory": "output",
-      "qemuargs": [
-        [
-          "-m", "4096M"
-        ],
-        [
-          "-cpu", "Westmere"
-        ],
-        [
-          "-m", "{{ user `memory` }}"
-        ],
-        [
-          "-smp", "cpus={{ user `cpus`}}"
-        ]
-      ],
+      "output_directory": "output-{{user `name`}}-{{timestamp}}",
+      "qemuargs": [[ "-m", "4096M" ],[ "-cpu", "Westmere" ],[ "-m", "{{ user `memory` }}" ],[ "-smp", "cpus={{ user `cpus`}}" ]],
       "shutdown_command": "C:\\Windows\\packer\\shutdown.bat",
       "shutdown_timeout": "1h",
-      "vm_name": "{{user `name`}}",
+      "vm_name": "{{user `name`}}-{{timestamp}}",
       "communicator": "winrm",
       "winrm_insecure": "true",
       "winrm_use_ssl": "true",
@@ -39,7 +26,7 @@
     },
     {
       "type": "vsphere-iso",
-      "vm_name": "{{user `name`}}",
+      "vm_name": "{{user `name`}}-{{timestamp}}",
       "CPUs": "{{user `cpus`}}",
       "RAM": "{{user `memory`}}",
       "RAM_reserve_all": true,
@@ -59,25 +46,11 @@
       "shutdown_command": "C:\\Windows\\packer\\shutdown.bat",
       "shutdown_timeout": "1h",
       "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
-      "iso_paths": [
-        "[] /vmimages/tools-isoimages/windows.iso"
-      ],
-      "iso_urls": [
-        "{{ user `iso_url` }}"
-      ],
-      "network_adapters": [
-        {
-          "network": "{{user `vsphere-network`}}",
-          "network_card": "vmxnet3"
-        }
-      ],
+      "iso_paths": [ "[] /vmimages/tools-isoimages/windows.iso" ],
+      "iso_urls": [ "{{ user `iso_url` }}" ],
+      "network_adapters": [ { "network": "{{user `vsphere-network`}}", "network_card": "vmxnet3" } ],
       "password": "{{user `vsphere-password`}}",
-      "storage": [
-        {
-          "disk_size": "{{user `disk_size`}}",
-          "disk_thin_provisioned": true
-        }
-      ],
+      "storage": [ { "disk_size": "{{user `disk_size`}}", "disk_thin_provisioned": true } ],
       "winrm_timeout": "4h",
       "winrm_use_ssl": "true",
       "winrm_insecure": "true",
@@ -108,7 +81,7 @@
     {
       "inline": [
         "Write-Host \"Installing Tools\"",
-        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install bginfo"
+        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install bginfo procexp"
       ],
       "type": "powershell"
     },
@@ -119,14 +92,9 @@
     
     {
       "type": "file",
-      "source": "autounattend/sysprep/unattended.xml",
-      "destination": "C:\\Windows\\packer\\unattended.xml"
-    },
-    {
-      "type": "file",
-      "source": "scripts/shutdown.bat",
+      "sources": [ "autounattend/sysprep/unattended.xml","scripts/shutdown.bat"],
       "destination": "C:\\Windows\\packer\\"
-    },    
+    },
     {
       "type": "file",
       "source": "scripts/bginfo.bgi",
@@ -146,29 +114,25 @@
       "type": "windows-shell"
     },
     {
-      "type": "windows-restart",
-      "restart_check_command": "powershell -command \"& {Write-Output 'restarted.'}\""
-
-    },
-    {
       "script": "scripts/cleanup.ps1",
       "type": "powershell"
     },
     {
       "type": "windows-restart",
       "restart_check_command": "powershell -command \"& {Write-Output 'restarted.'}\""
-
     }
 
 
   ],
   "post-processors": [
     [
+
        {
-         "only": ["qemu"],
+	"name": "pack",   
+	 "only": ["qemu"],
          "type": "compress",
-         "output": "output/disk.raw.tar.gz",
-	 "format": ".tar.gz"
+         "output": "{{user `name`}}.tar.gz",
+         "format": ".tar.gz"
        },
 
       {

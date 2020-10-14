@@ -19,6 +19,5 @@
     "iso_checksum": "ab4862ba7d1644c27f27516d24cb21e6b39234eb3301e5f1fb365a78b22f79b3",
     "iso_checksum_type": "sha256",
     "name": "windows_10-1903-aws",
-    "version" : "1",
     "floppy_files_list" : "floppy/ConfigureRemotingForAnsible.ps1,floppy/install_aws_components.ps1,floppy/install-vm-tools.cmd,autounattend/windows_10/aws/autounattend.xml"
 }

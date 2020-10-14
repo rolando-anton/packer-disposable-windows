@@ -1,7 +1,7 @@
 {
-"name": "windows_2016",
-"output_directory": "./output/windows_2016-base",
-"version": "1.0",
+"name": "windows-2016",
+"disk_format": "qcow2",
+"compress": "true",
 "iso_checksum_type": "md5",
 "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
 "iso_url": "http://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
@@ -10,6 +10,5 @@
 "disk_size": "81920",
 "memory": "4096",
 "cpus": "8",
-"output_directory": "./output/windows_2016-base",
-"floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2016/autounattend.xml"
+"floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_2016/qemu/autounattend.xml"
 }
