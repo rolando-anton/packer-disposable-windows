@@ -81,15 +81,12 @@
     {
       "inline": [
         "Write-Host \"Installing Tools\"",
-        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install bginfo procexp"
+        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install bginfo procexp",
+        "New-Item -Path 'C:\\Windows\\Setup\\Scripts' -ItemType Directory -Force",
+        "New-Item -Path \"C:\\Windows\\packer\" -ItemType Directory -Force"
       ],
       "type": "powershell"
     },
-    {
-      "inline": "New-Item -Path \"C:\\Windows\\packer\" -ItemType Directory -Force",
-      "type": "powershell"
-    },
-    
     {
       "type": "file",
       "sources": [ "autounattend/sysprep/unattended.xml","scripts/shutdown.bat"],
@@ -101,27 +98,14 @@
       "destination": "C:\\ProgramData\\chocolatey\\lib\\bginfo\\Tools\\"
     },   
     {
-      "inline": "New-Item -Path 'C:\\Windows\\Setup\\Scripts' -ItemType Directory -Force",
-      "type": "powershell"
-    },
-    {
       "type": "file",
       "source": "scripts/SetupComplete.cmd",
       "destination": "C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd"
     },
     {
-      "inline": "choco-cleaner.bat",
-      "type": "windows-shell"
-    },
-    {
       "script": "scripts/cleanup.ps1",
       "type": "powershell"
-    },
-    {
-      "type": "windows-restart",
-      "restart_check_command": "powershell -command \"& {Write-Output 'restarted.'}\""
     }
-
 
   ],
   "post-processors": [

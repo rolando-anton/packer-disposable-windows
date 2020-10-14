@@ -18,7 +18,7 @@ Param (
   [Switch] $CleanUpdates = $true,
  
   # Empty out Windows Event Logs. Fairly quick.
-  [Switch] $CleanEventLogs = $false,
+  [Switch] $CleanEventLogs = $true,
  
   # Remove temporary files used during build, such as Temp, Panther, Nuget and logs folders. Fairly quick.
   [Switch] $DeleteBuildfiles = $true,
@@ -33,6 +33,9 @@ Param (
   [Switch] $ZeroDisk = $true
 )
  
+# clean up chocolatey
+
+choco-cleaner.bat
  
 # Disable auto-login
 $regPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
