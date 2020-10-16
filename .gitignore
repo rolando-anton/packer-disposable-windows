@@ -1,4 +1,5 @@
 **/*.lock
+aws/role-policy.json
 packer_cache
 vsphere-creds.json
 output*
