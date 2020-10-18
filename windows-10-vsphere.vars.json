@@ -1,0 +1,8 @@
+{
+    "packer_user": "labadmin",
+    "packer_pass": "40Net123#",
+    "disk_size": "81920",
+    "memory": "4096",
+    "cpus": "8",
+    "floppy_files_list" : "floppy/ConfigureRemotingForAnsible.ps1,floppy/install-vm-tools.cmd,autounattend/windows_10/vsphere/autounattend.xml"
+}

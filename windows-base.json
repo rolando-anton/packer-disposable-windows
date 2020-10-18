@@ -11,7 +11,7 @@
       "headless": true,
       "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_urls": [ "{{ user `iso_url` }}" ],
-      "output_directory": "output-{{user `name`}}-{{timestamp}}",
+      "output_directory": "output-{{user `name`}}",
       "qemuargs": [[ "-m", "4096M" ],[ "-cpu", "Westmere" ],[ "-m", "{{ user `memory` }}" ],[ "-smp", "cpus={{ user `cpus`}}" ]],
       "shutdown_command": "C:\\Windows\\packer\\shutdown.bat",
       "shutdown_timeout": "1h",
@@ -96,7 +96,7 @@
       "type": "file",
       "source": "scripts/bginfo.bgi",
       "destination": "C:\\ProgramData\\chocolatey\\lib\\bginfo\\Tools\\"
-    },   
+    },
     {
       "type": "file",
       "source": "scripts/SetupComplete.cmd",
@@ -109,44 +109,43 @@
 
   ],
   "post-processors": [
-    [
-
-       {
-	"name": "pack",   
-	 "only": ["qemu"],
-         "type": "compress",
-         "output": "{{user `name`}}.tar.gz",
-         "format": ".tar.gz"
-       },
-
+      {
+        "type": "shell-local",
+        "name": "fix-output-qcow2",
+        "only": ["qemu"],
+        "inline": [
+	"mv output-{{user `name`}}/{{user `name`}} output/{{user `name`}}-{{timestamp}}.qcow2",
+       	"rm -rvf output-{{user `name`}}/"
+	]
+      },
       {
         "type": "shell-local",
         "name": "gcp",
-        "only": ["qemu"],	
+        "only": ["qemu"],
         "inline": [
-         "gsutil cp {{user `name`}}.tar.gz gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz",
-         "gcloud compute images create {{user `image_family`}}-{{timestamp}} \\",
-         "--source-uri=gs://{{user `gcs_bucket`}}/{{user `image_family`}}-{{timestamp}}.tar.gz \\",
-         "--family={{user `image_family`}}",
-         "rm -vf {{user `name`}}.tar.gz"
+	 "mv output-{{user `name`}}/{{user `name`}} disk.raw",
+	 "tar -cf - disk.raw |pigz > {{user `name`}}.tar.gz",
+	 "rm -vf disk.raw",
+         "gsutil cp {{user `name`}}.tar.gz gs://{{user `gcs_bucket`}}/{{user `name`}}-{{timestamp}}.tar.gz",
+         "gcloud compute images create {{user `name`}}-{{timestamp}} \\",
+         "--source-uri=gs://{{user `gcs_bucket`}}/{{user `name`}}-{{timestamp}}.tar.gz \\",
+         "--family={{user `name`}}",
+         "rm -rvf output-{{user `name`}}/",
+	 "rm -vf {{user `name`}}.tar.gz"
         ]
       },
-
-
     {
      "type": "shell-local",
      "name": "convert-to-ova",
      "only": ["vsphere-iso"],
-     "inline": [ 
+     "inline": [
         "/usr/bin/ovftool output_{{user `name`}}/{{user `name`}}.ovf output_{{user `name`}}/{{user `name`}}.ova",
         "rm -vf output_{{user `name`}}/{{user `name`}}.ovf output_{{user `name`}}/{{user `name`}}.mf output_{{user `name`}}/{{user `name`}}-disk-0.vmdk"
      ]
     },
     {
       "only": ["vsphere-iso"],
-      "files": [
-        "output_{{user `name`}}/{{user `name`}}.ova"
-      ],
+      "files": [ "output_{{user `name`}}/{{user `name`}}.ova" ],
       "type": "artifice"
     },
     {
@@ -165,7 +164,7 @@
       }
     }
     ]
- ]
 
- 
+
+
 }

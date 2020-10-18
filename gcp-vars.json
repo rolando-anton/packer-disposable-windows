@@ -1,0 +1,5 @@
+{
+    "compress": "false",
+    "disk_format": "raw",
+    "gcs_bucket" : "packer_images"
+}

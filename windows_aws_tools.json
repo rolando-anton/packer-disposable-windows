@@ -1,0 +1,6 @@
+"provisioners": [
+    {
+      "script": "scripts/install_aws_components.ps1",
+      "type": "powershell"
+    }
+]
