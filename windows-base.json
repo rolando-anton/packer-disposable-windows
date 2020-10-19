@@ -89,7 +89,7 @@
     },
     {
       "type": "file",
-      "sources": [ "autounattend/sysprep/unattended.xml","scripts/shutdown.bat","scripts/install_aws_components.ps1"],
+      "sources": [ "autounattend/sysprep/unattended.xml","scripts/shutdown.bat","scripts/install_aws_components.ps1","scripts/uninstall-vmwaretools.ps1","scripts/SetupComplete_noaws.cmd","scripts/SetupComplete_aws.cmd"],
       "destination": "C:\\Windows\\packer\\"
     },
     {
@@ -99,14 +99,12 @@
     },
     {
       "type": "powershell",
-      "environment_vars": ["AWS={{ build `enable_aws_tool`}}"],
-      "inline": ["if ($env:AWS -eq \"true\" ) { . C:\\Windows\\packer\\install_aws_components.ps1}  "]
-    },
-
-    {
-      "type": "file",
-      "source": "scripts/SetupComplete.cmd",
-      "destination": "C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd"
+      "environment_vars": ["AWS={{ user `enable_aws_tool`}}"],
+      "inline": [ 
+	      "if ($Env:AWS -eq \"true\" ) { . C:\\Windows\\packer\\install_aws_components.ps1}",
+	      "Remove-Item -Path C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd",
+	      "if ($Env:AWS -eq \"true\" ) { Copy-Item -Path C:\\Windows\\packer\\SetupComplete_aws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd} else {Copy-Item -Path C:\\Windows\\packer\\SetupComplete_noaws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd}"
+      ]
     },
     {
       "script": "scripts/cleanup.ps1",

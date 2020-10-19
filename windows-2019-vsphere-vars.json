@@ -1,4 +1,5 @@
 {
+  "enable_aws_tool" : "false",
   "disk_size": "81920",
   "memory": "4096",
   "cpus": "8",

@@ -7,3 +7,5 @@ powercfg -Change -monitor-timeout-dc 0
 powercfg -hibernate OFF
 dism.exe /online /cleanup-image /scanhealth
 dism.exe /online /cleanup-image /restorehealth
+powershell.exe -ExecutionPolicy Bypass -Command "C:\Windows\packer\uninstall-vmwaretools.ps1"
+rd /S /Q "C:\Windows\packer\"
