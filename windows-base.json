@@ -89,7 +89,7 @@
     },
     {
       "type": "file",
-      "sources": [ "autounattend/sysprep/unattended.xml","scripts/shutdown.bat"],
+      "sources": [ "autounattend/sysprep/unattended.xml","scripts/shutdown.bat","scripts/install_aws_components.ps1"],
       "destination": "C:\\Windows\\packer\\"
     },
     {
@@ -97,6 +97,12 @@
       "source": "scripts/bginfo.bgi",
       "destination": "C:\\ProgramData\\chocolatey\\lib\\bginfo\\Tools\\"
     },
+    {
+      "type": "powershell",
+      "environment_vars": ["AWS={{ build `enable_aws_tool`}}"],
+      "inline": ["if ($env:AWS -eq \"true\" ) { . C:\\Windows\\packer\\install_aws_components.ps1}  "]
+    },
+
     {
       "type": "file",
       "source": "scripts/SetupComplete.cmd",
