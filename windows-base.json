@@ -26,12 +26,12 @@
     },
     {
       "type": "vsphere-iso",
-      "vm_name": "{{user `name`}}-{{timestamp}}",
+      "vm_name": "{{user `name`}}-{{user `tag`}}",
       "CPUs": "{{user `cpus`}}",
       "RAM": "{{user `memory`}}",
       "RAM_reserve_all": true,
       "communicator": "winrm",
-      "convert_to_template": "true",
+      "convert_to_template": "{{user `vsphere-maketemplate`}}",
       "cluster": "{{user `vsphere-cluster`}}",
       "datacenter": "{{user `vsphere-datacenter`}}",
       "datastore": "{{user `vsphere-datastore`}}",
@@ -102,7 +102,6 @@
       "environment_vars": ["AWS={{ user `enable_aws_tool`}}"],
       "inline": [ 
 	      "if ($Env:AWS -eq \"true\" ) { . C:\\Windows\\packer\\install_aws_components.ps1}",
-	      "Remove-Item -Path C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd",
 	      "if ($Env:AWS -eq \"true\" ) { Copy-Item -Path C:\\Windows\\packer\\SetupComplete_aws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd} else {Copy-Item -Path C:\\Windows\\packer\\SetupComplete_noaws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd}"
       ]
     },
@@ -112,13 +111,13 @@
     }
 
   ],
-  "post-processors": [
+  "post-processors": [[
       {
         "type": "shell-local",
         "name": "fix-output-qcow2",
         "only": ["qemu"],
         "inline": [
-	"mv output-{{user `name`}}/{{user `name`}} output/{{user `name`}}-{{timestamp}}.qcow2",
+	"mv output-{{user `name`}}/{{user `name`}} output/{{user `name`}}-{{user `tag`}}.qcow2",
        	"rm -rvf output-{{user `name`}}/"
 	]
       },
@@ -130,9 +129,9 @@
 	 "mv output-{{user `name`}}/{{user `name`}} disk.raw",
 	 "tar -cf - disk.raw |pigz > {{user `name`}}.tar.gz",
 	 "rm -vf disk.raw",
-         "gsutil cp {{user `name`}}.tar.gz gs://{{user `gcs_bucket`}}/{{user `name`}}-{{timestamp}}.tar.gz",
-         "gcloud compute images create {{user `name`}}-{{timestamp}} \\",
-         "--source-uri=gs://{{user `gcs_bucket`}}/{{user `name`}}-{{timestamp}}.tar.gz \\",
+         "gsutil cp {{user `name`}}.tar.gz gs://{{user `gcs_bucket`}}/{{user `name`}}-{{user `tag`}}.tar.gz",
+         "gcloud compute images create {{user `name`}}-{{user `tag`}} \\",
+         "--source-uri=gs://{{user `gcs_bucket`}}/{{user `name`}}-{{user `tag`}}.tar.gz \\",
          "--family={{user `name`}}",
          "rm -rvf output-{{user `name`}}/",
 	 "rm -vf {{user `name`}}.tar.gz"
@@ -140,16 +139,32 @@
       },
     {
      "type": "shell-local",
-     "name": "convert-to-ova",
+     "name": "export-ovf",
      "only": ["vsphere-iso"],
+     "environment_vars" : 
+     [ 
+        "GOVC_INSECURE=1",
+	"GOVC_URL={{user `vsphere-server`}}",
+	"GOVC_CLUSTER={{user `vsphere-cluster`}}",
+	"GOVC_RESOURCE_POOL=\"*/Resources\"",
+        "GOVC_USERNAME={{user `vsphere-user`}}",
+        "GOVC_PASSWORD={{user `vsphere-password`}}"
+     ],
      "inline": [
-        "/usr/bin/ovftool output_{{user `name`}}/{{user `name`}}.ovf output_{{user `name`}}/{{user `name`}}.ova",
-        "rm -vf output_{{user `name`}}/{{user `name`}}.ovf output_{{user `name`}}/{{user `name`}}.mf output_{{user `name`}}/{{user `name`}}-disk-0.vmdk"
+        "govc export.ovf -sha=1 -vm={{user `name`}}-{{user `tag`}} ."
      ]
     },
-    {
+            {
+     "type": "shell-local",
+     "only": ["vsphere-iso"],
+     "inline": [
+        "mv {{user `name`}}-{{user `tag`}}/{{user `name`}}-{{user `tag`}}-disk-0.vmdk .",
+        "rm -rvf {{user `name`}}-{{user `tag`}}"
+     ]
+    },
+        {
       "only": ["vsphere-iso"],
-      "files": [ "output_{{user `name`}}/{{user `name`}}.ova" ],
+      "files": [ "{{user `name`}}-{{user `tag`}}-disk-0.vmdk" ],
       "type": "artifice"
     },
     {
@@ -160,14 +175,22 @@
       "secret_key": "{{user `aws_secret_key`}}",
       "region": "{{user `aws_region`}}",
       "s3_bucket_name": "{{user `aws_s3_bucket_name`}}",
-      "s3_key_name": "{{user `name`}}.ova",
-      "keep_input_artifact": false,
+      "s3_key_name": "{{user `name`}}-{{user `tag`}}-disk-0.vmdk",
+      "format": "vmdk",
       "license_type": "BYOL",
       "tags": {
-        "Description": "packer amazon-import {{timestamp}}"
+        "Description": "packer amazon-import {{user `name`}}-{{user `tag`}}.ova"
       }
+    },
+        {
+     "type": "shell-local",
+     "name": "cleanup-aws",
+     "only": ["vsphere-iso"],
+     "inline": [
+        " rm -vf {{user `name`}}-{{user `tag`}}-disk-0.vmdk"
+     ]
     }
-    ]
+  ]]
 
 
 

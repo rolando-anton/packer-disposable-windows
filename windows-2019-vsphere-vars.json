@@ -1,7 +1,6 @@
 {
-  "enable_aws_tool" : "false",
   "disk_size": "81920",
-  "memory": "4096",
-  "cpus": "8",
+  "memory": "16384",
+  "cpus": "16",
   "floppy_files_list" : "floppy/ConfigureRemotingForAnsible.ps1,floppy/install-vm-tools.cmd,autounattend/windows_2019/vsphere/autounattend.xml"
 }

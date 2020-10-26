@@ -1,6 +1,6 @@
 {
     "disk_size": "81920",
-    "memory": "4096",
+    "memory": "8192",
     "cpus": "8",
     "floppy_files_list" : "floppy/drivers/virtio/*,floppy/ConfigureRemotingForAnsible.ps1,autounattend/windows_10/qemu/autounattend.xml"
 }

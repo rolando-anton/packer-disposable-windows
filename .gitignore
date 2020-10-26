@@ -2,5 +2,8 @@
 aws/role-policy.json
 packer_cache
 vsphere-creds.json
+aws-creds.json
+*take*
+*.vmdk
 output*
 **/gcp.json
