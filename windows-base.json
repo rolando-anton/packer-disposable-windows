@@ -81,7 +81,7 @@
     {
       "inline": [
         "Write-Host \"Installing Tools\"",
-        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install bginfo procexp",
+        "choco install googlechrome 7zip notepadplusplus choco-cleaner git.install procexp",
         "New-Item -Path 'C:\\Windows\\Setup\\Scripts' -ItemType Directory -Force",
         "New-Item -Path \"C:\\Windows\\packer\" -ItemType Directory -Force"
       ],
@@ -102,7 +102,7 @@
       "environment_vars": ["AWS={{ user `enable_aws_tool`}}"],
       "inline": [ 
 	      "if ($Env:AWS -eq \"true\" ) { . C:\\Windows\\packer\\install_aws_components.ps1}",
-	      "if ($Env:AWS -eq \"true\" ) { Copy-Item -Path C:\\Windows\\packer\\SetupComplete_aws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd} else {Copy-Item -Path C:\\Windows\\packer\\SetupComplete_noaws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd}"
+	      "if ($Env:AWS -eq \"true\" ) { Copy-Item -Path C:\\Windows\\packer\\SetupComplete_aws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd } else { choco install bginfo ; Copy-Item -Path C:\\Windows\\packer\\SetupComplete_noaws.cmd C:\\Windows\\Setup\\Scripts\\SetupComplete.cmd}"
       ]
     },
     {
