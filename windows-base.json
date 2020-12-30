@@ -117,6 +117,7 @@
         "name": "fix-output-qcow2",
         "only": ["qemu"],
         "inline": [
+        "mkdir -p output",
 	"mv output-{{user `name`}}/{{user `name`}} output/{{user `name`}}-{{user `tag`}}.qcow2",
        	"rm -rvf output-{{user `name`}}/"
 	]
