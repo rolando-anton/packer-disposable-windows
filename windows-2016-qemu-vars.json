@@ -1,6 +1,4 @@
 {
-"disk_format": "qcow2",
-"compress": "true",
 "disk_size": "81920",
 "memory": "4096",
 "cpus": "8",
