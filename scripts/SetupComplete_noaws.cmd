@@ -1,3 +1,4 @@
+wmic useraccount WHERE 'Disabled=0 AND LocalAccount=1' set PasswordExpires=false
 powershell -c "New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name 'BgInfo' -Value 'C:\ProgramData\chocolatey\lib\bginfo\Tools\Bginfo.exe C:\ProgramData\chocolatey\lib\bginfo\Tools\bginfo.bgi /silent /timer:0 /nolicprompt' -PropertyType 'String' -force"
 sc.exe config wuauserv start=disabled
 sc.exe stop wuauserv

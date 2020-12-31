@@ -1,3 +1,4 @@
+wmic useraccount WHERE 'Disabled=0 AND LocalAccount=1' set PasswordExpires=false
 sc.exe config wuauserv start=disabled
 sc.exe stop wuauserv
 powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
