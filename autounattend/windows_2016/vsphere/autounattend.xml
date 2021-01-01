@@ -140,7 +140,12 @@
         <SynchronousCommand wcm:action="add">
           <CommandLine>cmd.exe /c C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File a:\ConfigureRemotingForAnsible.ps1</CommandLine>
           <Order>1</Order>
-        </SynchronousCommand>
+  </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c a:\install-vm-tools.cmd</CommandLine>
+                    <Order>2</Order>
+                    <Description>Install VMware Tools</Description>
+                </SynchronousCommand>
       </FirstLogonCommands>
       <OOBE>
         <HideEULAPage>true</HideEULAPage>
